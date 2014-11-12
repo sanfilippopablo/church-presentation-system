@@ -1,0 +1,10 @@
+{
+  "name": "church-presentation-system",
+  "version": "0.0.1",
+  "homepage": "https://github.com/sanfilippopablo/church-presentation-system",
+  "authors": [
+    "Pablo Sanfilippo <sanfilippopablo@gmail.com>"
+  ],
+  "description": "Web based church presentation system.",
+  "license": "GPL2"
+}
