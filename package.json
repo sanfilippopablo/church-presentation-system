@@ -32,6 +32,7 @@
     "socket.io": "^1.2.0"
   },
   "devDependencies": {
+    "gulp-karma": "0.0.4",
     "karma-mocha": "^0.1.9"
   }
 }
