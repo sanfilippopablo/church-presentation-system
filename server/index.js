@@ -13,4 +13,9 @@ app.use('/presentation', express.static(path.join(__dirname, '../public/presenta
 // socket.io server
 io.on('connection', function (socket) {
 	console.log('New connection.');
+
+	socket.on('echo', function(data){
+		console.log("Echo received")
+		socket.emit('response', data)
+	})
 });

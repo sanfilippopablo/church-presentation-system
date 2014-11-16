@@ -2,7 +2,7 @@
 var gulp = require('gulp');
 var nodemon = require('gulp-nodemon');
 var jshint = require('gulp-jshint');
-var mocha = require('gulp-mocha');
+var mocha = require('gulp-spawn-mocha');
 var karma = require('gulp-karma');
 
 gulp.task('lint', function () {
