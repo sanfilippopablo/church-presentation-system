@@ -32,7 +32,11 @@ gulp.task('test-frontend', function() {
 gulp.task('test', ['test-backend', 'test-frontend'])
 
 gulp.task('develop', function () {
-  nodemon({ script: 'server/index.js', ext: 'js' })
+  nodemon({
+		script: 'server/index.js',
+		ext: 'js',
+		ignore: ['./.git/**']
+	})
     .on('change', ['lint'])
     .on('restart', function () {
       console.log('restarted!')
