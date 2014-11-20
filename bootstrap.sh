@@ -18,7 +18,7 @@ sudo apt-get update
 # Install packages
 # ================
 
-sudo apt-get install -y mongodb-org nodejs fontconfig
+sudo apt-get install -y mongodb-org nodejs fontconfig git
 
 # Install node global packages
 sudo npm install -g bower karma mocha gulp phantomjs
