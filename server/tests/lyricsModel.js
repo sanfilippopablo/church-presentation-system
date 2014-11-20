@@ -24,6 +24,7 @@ describe('Lyric model', function(){
 
   // Load fixtures before each test
   beforeEach(function(done){
+    done();
 
   })
 
