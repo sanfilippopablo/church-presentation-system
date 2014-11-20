@@ -2,10 +2,37 @@ var should = require('should');
 var assert = require('assert');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
-var Lyric = require('../models/Lyric')(mongoose)
+var mongoose.connect('mongodb://localhost/test');
+var connection = mongoose.connection;
+var Lyric = require('../models/Lyric')(mongoose);
 
 describe('Lyric model', function(){
+
+  // HOOKS //
+
+  // Drop database before tests
+  before(function(done){
+    connection.on('open', function(){
+      connection.db.dropDatabase(done);
+    })
+  })
+
+  // Close connection after tests
+  after(function(done){
+    connection.close(done);
+  })
+
+  // Load fixtures before each test
+  beforeEach(function(done){
+    
+  })
+
+  // Drop database after each test
+  afterEach(function(done){
+    connection.db.dropDatabase(done);
+  })
+
+  // TESTS //
 
   describe('query() method', function(){
 
