@@ -6,5 +6,9 @@
     "Pablo Sanfilippo <sanfilippopablo@gmail.com>"
   ],
   "description": "Web based church presentation system.",
-  "license": "GPL2"
+  "license": "GPL2",
+  "dependencies": {
+    "angular-material": "~0.5.1",
+    "material-design-icons": "~1.0.1"
+  }
 }
