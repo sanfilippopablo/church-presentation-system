@@ -2,7 +2,7 @@ module.exports = function (mongoose) {
   var Schema = mongoose.Schema;
 
   // Create Schema
-  var lyricSchema = new Schema({
+  var songSchema = new Schema({
     title: String,
     creationDate: {type: Date, default: Date.now},
     verses: [{
@@ -12,19 +12,19 @@ module.exports = function (mongoose) {
   });
 
   // Add indexes
-  lyricSchema.index(
+  songSchema.index(
     {'verses.lines': 'text'},
     { 'default_language': 'spanish' }
   )
 
   // Static Methods
-  lyricSchema.statics.query = function (str, cb) {
+  songSchema.statics.query = function (str, cb) {
     this.find({$text: {$search: str}}, cb)
   }
 
   // Instance Methods
 
   // Create model
-  var Lyric = mongoose.model('Lyric', lyricSchema);
-  return Lyric;
+  var Song = mongoose.model('Song', songSchema);
+  return Song;
 }

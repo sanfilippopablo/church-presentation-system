@@ -7,7 +7,7 @@ var path = require('path');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 var connection = mongoose.connection;
-var Lyric = require('./models/Lyric')(mongoose);
+var Song = require('./models/Song')(mongoose);
 
 server.listen(80);
 
@@ -20,7 +20,7 @@ app.use('/libs', express.static(path.join(__dirname, '../public/libs')));
 io.on('connection', function (socket) {
   socket.on('song:create', function(data){
     console.log(data);
-    var l = new Lyric(data);
+    var l = new Song(data);
     l.save();
   })
 });
