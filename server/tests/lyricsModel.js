@@ -2,7 +2,7 @@ var should = require('should');
 var assert = require('assert');
 
 var mongoose = require('mongoose');
-var mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/test');
 var connection = mongoose.connection;
 var Lyric = require('../models/Lyric')(mongoose);
 
@@ -24,7 +24,7 @@ describe('Lyric model', function(){
 
   // Load fixtures before each test
   beforeEach(function(done){
-    
+
   })
 
   // Drop database after each test
