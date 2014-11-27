@@ -34,8 +34,8 @@ gulp.task('test', ['test-backend', 'test-frontend'])
 gulp.task('develop', function () {
   nodemon({
 		script: 'server/index.js',
-		ext: 'js',
-		ignore: ['./.git/**']
+		watch: ['server', 'public'],
+		ignore: ['.git/', 'node_modules']
 	})
     .on('change', ['lint'])
     .on('restart', function () {
