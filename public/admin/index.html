@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <base href="/admin/"></base>
   <title>Admin</title>
 
   <!-- Vendor Styles -->
@@ -28,15 +29,18 @@
     </md-toolbar>
 
     <div layout="horizontal">
-      <md-content flex>HOla</md-content>
-      <md-content flex>asd</md-content>
-      <md-content flex>qweg</md-content>
+      <md-content flex ui-view="primary-menu"></md-content>
+      <md-content flex ui-view="secondary-menu"></md-content>
+      <md-content flex>
+        Live view
+      </md-content>
     </div>
   </div>
 
   <!-- Vendor Scripts -->
   <script src="/socket.io/socket.io.js"></script>
   <script src="/libs/angular/angular.js"></script>
+  <script src="/libs/angular-ui-router/release/angular-ui-router.js"></script>
   <script src="/libs/angular-animate/angular-animate.js"></script>
   <script src="/libs/angular-aria/angular-aria.js"></script>
   <script src="/libs/angular-material/angular-material.js"></script>
