@@ -2,7 +2,6 @@ module.exports = function(socket, Song) {
 
   // Create
   socket.on('song:create', function(song) {
-    console.log(song)
     Song.create(song, function(err, obj) {
       socket.emit('song:created', obj);
     })

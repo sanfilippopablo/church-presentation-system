@@ -30,4 +30,4 @@ io.on('connection', function (socket) {
 
 });
 
-module.exports = server;
+exports.server = server;

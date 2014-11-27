@@ -10,29 +10,29 @@ var options = {
 
 describe('Songs Endpoint', function() {
 
-  // Restart server before each test
-  beforeEach(function(done) {
-    server = require('../index');
+  beforeEach(function(done){
+    server = require('../index').server;
     done();
   })
 
-  afterEach(function(done){
-    mongoose.connection.close(done);
-  })
+  describe('song:create', function() {
 
-  describe('Echo', function() {
-
-    it('should echo', function(done) {
+    it('should respond with song:created and the object created on the DB', function(done) {
       var client = io.connect('http://localhost');
-      var the_data = "wegreh"
+      var song = {
+        'title': 'Tu amor por mí'
+      }
       client.on('connect', function() {
-        client.on('response', function(data) {
-          data.should.equal(the_data);
+        client.on('song:created', function(obj) {
+          obj.should.be.ok;
+          obj.should.have.property('_id');
+          obj.should.have.property('title', song.title);
           client.disconnect();
           done();
         })
       })
-      client.emit('echo', the_data)
+      client.emit('song:create', song);
     })
-  })
+  });
+  
 })
