@@ -24,4 +24,10 @@ io.on('connection', function (socket) {
   // Songs
   require('./controllers/Song')(socket, Song);
 
+  socket.on('echo', function(data){
+    socket.emit('response', data)
+  })
+
 });
+
+module.exports = server;
