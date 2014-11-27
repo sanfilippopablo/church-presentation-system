@@ -10,7 +10,8 @@ angular
       url: '/songs',
       views: {
         'primary-menu': {
-          templateUrl: 'partials/songs/primary-menu.html'
+          templateUrl: 'partials/songs/primary-menu.html',
+          controller: 'SongsPrimaryMenuController'
         },
         'secondary-menu': {
           templateUrl: 'partials/songs/secondary-menu.html'
