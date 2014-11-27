@@ -19,7 +19,7 @@ module.exports = function (mongoose) {
 
   // Static Methods
   songSchema.statics.query = function (str, cb) {
-    this.find({$text: {$search: str}}, cb)
+    return this.find({$text: {$search: str}}, cb);
   }
 
   // Instance Methods

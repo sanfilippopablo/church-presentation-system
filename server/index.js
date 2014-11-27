@@ -1,3 +1,5 @@
+var environment = process.env.NODE_ENV
+
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
@@ -18,9 +20,34 @@ app.use('/libs', express.static(path.join(__dirname, '../public/libs')));
 
 // socket.io server
 io.on('connection', function (socket) {
-  socket.on('song:create', function(data){
-    console.log(data);
-    var l = new Song(data);
-    l.save();
-  })
+
+  // SONGS //
+  // Create
+  socket.on('song:create', function(song) {
+    Song.create(song, function(err, obj){
+      socket.emit('song:created', obj);
+    })
+  });
+
+  // Update
+  socket.on('song:update', function(id, data) {
+    Song.findByIdAndUpdate(id, data, function(err, obj){
+      socket.emit('song:updated', obj);
+    })
+  });
+
+  // Delete
+  socket.on('song:delete', function(id) {
+    Song.findByIdAndRemove(id, function(err, obj){
+      socket.emit('song:deleted', obj);
+    })
+  });
+
+  // Query
+  socket.on('song:query', function(text) {
+    Song.query(text, function(err, songs){
+      socket.emit('song:queryresult', songs);
+    })
+  });
+
 });
