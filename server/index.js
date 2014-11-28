@@ -11,7 +11,7 @@ mongoose.connect('mongodb://localhost/test');
 var connection = mongoose.connection;
 var Song = require('./models/Song')(mongoose);
 
-server.listen(80);
+server.listen(8080);
 
 // Serving webapps
 app.use('/admin', express.static(path.join(__dirname, '../public/admin')));

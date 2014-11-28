@@ -18,7 +18,7 @@ describe('Songs Endpoint', function() {
   describe('song:create', function() {
 
     it('should respond with song:created and the object created on the DB', function(done) {
-      var client = io.connect('http://localhost');
+      var client = io.connect('http://localhost:8080');
       var song = {
         'title': 'Tu amor por mí'
       }
@@ -34,5 +34,5 @@ describe('Songs Endpoint', function() {
       client.emit('song:create', song);
     })
   });
-  
+
 })
