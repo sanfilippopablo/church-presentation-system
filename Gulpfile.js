@@ -5,15 +5,22 @@ var jshint = require('gulp-jshint');
 var mocha = require('gulp-spawn-mocha');
 var karma = require('gulp-karma');
 
-gulp.task('lint', function () {
-	return
+gulp.task('lint', function() {
+  return
   gulp.src('./**/*.js')
     .pipe(jshint())
 })
 
-gulp.task('test-backend', function () {
-    return gulp.src('server/tests/*.js', {read: false})
-        .pipe(mocha({reporter: 'spec'}));
+gulp.task('test-backend', function() {
+
+	process.env.NODE_ENV = 'test'
+
+  return gulp.src('server/tests/*.js', {
+      read: false
+    })
+    .pipe(mocha({
+      reporter: 'spec'
+    }));
 });
 
 gulp.task('test-frontend', function() {
@@ -31,14 +38,14 @@ gulp.task('test-frontend', function() {
 
 gulp.task('test', ['test-backend', 'test-frontend'])
 
-gulp.task('develop', function () {
+gulp.task('develop', function() {
   nodemon({
-		script: 'server/index.js',
-		watch: ['server', 'public'],
-		ignore: ['.git/', 'node_modules']
-	})
+      script: 'server/index.js',
+      watch: ['server', 'public'],
+      ignore: ['.git/', 'node_modules']
+    })
     .on('change', ['lint'])
-    .on('restart', function () {
+    .on('restart', function() {
       console.log('restarted!')
     })
 })
