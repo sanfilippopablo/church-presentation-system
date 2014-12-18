@@ -18,20 +18,23 @@ describe('Songs Endpoint', function() {
     done();
   });
 
-  it('should respond with song:created and the object created on the DB', function(done) {
-    var client = io.connect(connectionString, options);
-    var song = {
-      'title': 'Tu amor por mí'
-    }
-    client.on('connect', function() {
-      client.on('song:created', function(obj) {
-        obj.should.be.ok;
-        obj.should.have.property('_id');
-        obj.should.have.property('title', song.title);
-        done();
-      })
-    })
-    client.emit('song:create', song);
-  });
+  describe('song:create', function() {
 
+    it('should respond with song:created and the object created on the DB', function(done) {
+      var client = io.connect(connectionString, options);
+      var song = {
+        'title': 'Tu amor por mí'
+      }
+      client.on('connect', function() {
+        client.on('song:created', function(obj) {
+          obj.should.be.ok;
+          obj.should.have.property('_id');
+          obj.should.have.property('title', song.title);
+          done();
+        })
+      })
+      client.emit('song:create', song);
+    });
+  })
+  
 })
