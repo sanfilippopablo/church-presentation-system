@@ -19,12 +19,13 @@ app.use('/admin', express.static(path.join(__dirname, '../public/admin')));
 app.use('/live', express.static(path.join(__dirname, '../public/live')));
 app.use('/libs', express.static(path.join(__dirname, '../public/libs')));
 
+var currentState = {};
+
 // socket.io server
 io.sockets.on('connection', function (socket) {
 
   // Songs
-  require('./controllers/Song')(socket, Song);
-
+  require('./controllers/Song')(socket, Song, currentState);
 });
 
 server.listen(conf.port, function(){

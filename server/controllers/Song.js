@@ -1,4 +1,6 @@
-module.exports = function(socket, Song) {
+module.exports = function(socket, Song, currentState) {
+
+  // == MANAGEMENT ==
 
   // Create
   socket.on('song:create', function(song) {
@@ -27,4 +29,39 @@ module.exports = function(socket, Song) {
       socket.emit('song:queryresult', songs);
     })
   });
+
+
+  // == LIVE ==
+
+  // Select song
+  socket.on('live:song:select-song', function(id) {
+    Song.findById(id, function(err, song){
+
+      // Mark first verse as selected
+      song.verses[0]['selected'] = true;
+
+      // Update currentState
+      currentState = {
+        'type': 'song',
+        'data': {
+          'song': song,
+          'selectedVerse': 0
+        }
+      }
+
+      // Notify
+      socket.emit('live:song:song-selected', currentState);
+    })
+  })
+
+  // Select verse
+  socket.on('live:song:select-verse', function(index) {
+
+    // Update currentState
+    currentState.data.selectedVerse = index;
+
+    // Notify
+    socket.emit('live:song:verse-selected ', currentState);
+  })
+
 }
