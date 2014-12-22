@@ -6,6 +6,10 @@ var server = require('http').Server(app);
 exports.server = server;
 var io = require('socket.io')(server);
 var path = require('path');
+var Datastore = require('nedb');
+
+var db = {};
+var db.songs = new Datastore({filename: 'songs.db',autoload: true});
 
 var conf = require('./config')[environment];
 
@@ -20,7 +24,7 @@ var currentState = {};
 io.sockets.on('connection', function (socket) {
 
   // Songs
-  require('./controllers/Song')(socket, currentState);
+  require('./controllers/Song')(socket, db.songs, currentState);
 });
 
 server.listen(conf.port, function(){
