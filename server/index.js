@@ -9,7 +9,7 @@ var path = require('path');
 var Datastore = require('nedb');
 
 var db = {};
-var db.songs = new Datastore({filename: 'songs.db',autoload: true});
+db.songs = new Datastore({filename: 'songs.db',autoload: true});
 
 var conf = require('./config')[environment];
 
