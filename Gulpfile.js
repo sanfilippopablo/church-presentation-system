@@ -42,7 +42,8 @@ gulp.task('develop', function() {
   nodemon({
       script: 'server/index.js',
       watch: ['server', 'public'],
-      ignore: ['.git/', 'node_modules']
+      ignore: ['.git/', 'node_modules'],
+      env: { 'NODE_ENV': 'development' }
     })
     .on('change', ['lint'])
     .on('restart', function() {
