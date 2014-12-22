@@ -6,13 +6,8 @@ var server = require('http').Server(app);
 exports.server = server;
 var io = require('socket.io')(server);
 var path = require('path');
-var mongoose = require('mongoose');
 
 var conf = require('./config')[environment];
-
-// Mongoose setup
-mongoose.connect(conf.connectionString);
-var Song = require('./models/Song')(mongoose);
 
 // Serving webapps
 app.use('/admin', express.static(path.join(__dirname, '../public/admin')));
@@ -25,7 +20,7 @@ var currentState = {};
 io.sockets.on('connection', function (socket) {
 
   // Songs
-  require('./controllers/Song')(socket, Song, currentState);
+  require('./controllers/Song')(socket, currentState);
 });
 
 server.listen(conf.port, function(){

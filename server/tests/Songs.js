@@ -1,6 +1,5 @@
 var should = require('should');
 var assert = require('assert');
-var mongoose = require('mongoose');
 var io = require('socket.io-client');
 var server
 var options = {
@@ -36,5 +35,5 @@ describe('Songs Endpoint', function() {
       client.emit('song:create', song);
     });
   })
-  
+
 })
