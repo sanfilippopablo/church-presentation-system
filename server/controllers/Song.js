@@ -19,7 +19,9 @@ module.exports = function(socket, Songs, currentState) {
 
   // Delete
   socket.on('song:delete', function(id) {
+    console.log('Removing doc')
     Songs.remove({_id: id}, {}, function(err, numRemoved) {
+      console.log('Doc removed', numRemoved)
       socket.emit('song:deleted');
     })
   });
