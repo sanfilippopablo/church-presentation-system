@@ -4,6 +4,7 @@ module.exports = function(socket, Songs, currentState) {
 
   // Create
   socket.on('song:create', function(song) {
+    song.creationDate = new Date();
     Songs.insert(song, function(err, obj) {
       socket.emit('song:created', obj);
     })
