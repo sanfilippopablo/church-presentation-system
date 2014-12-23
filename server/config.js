@@ -3,11 +3,9 @@ var defaultPort = 8000;
 
 module.exports = {
   development: {
-    port: defaultPort,
-    connectionString: 'mongodb://localhost/cps-development'
+    port: defaultPort
   },
   test: {
-    port: defaultPort,
-    connectionString: 'mongodb://localhost/cps-test'
+    port: defaultPort
   }
 }
