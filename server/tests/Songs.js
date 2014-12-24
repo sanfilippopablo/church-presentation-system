@@ -8,7 +8,6 @@ var conf = require('../config')[process.env.NODE_ENV];
 var Datastore = require('nedb');
 var dbPath = conf.dbPath('songs');
 var fixturePath = conf.fixturePath('songs');
-console.log('fixpath ', fixturePath, dbPath)
 var connectionString = 'http://localhost:' + conf.port;
 var server;
 var options = {
@@ -26,10 +25,10 @@ describe('Songs Endpoint', function() {
     server = index.server;
     db = index.db.songs;
 
-    console.log(db)
-
     // Load fixtures in the DB
-    db.remove({}, {multi: true}, function(err, numRemoved){
+    db.remove({}, {
+      multi: true
+    }, function(err, numRemoved) {
       db.insert(fixtures, done);
     })
 
@@ -69,18 +68,49 @@ describe('Songs Endpoint', function() {
     var id = "vaJKoz7CJJRlDvaA";
     it('should delete the object in the DB and respond with song:deleted', function(done) {
       // Make sure the song exists in DB
-      db.findOne({_id: id}, function(err, doc) {
+      db.findOne({
+        _id: id
+      }, function(err, doc) {
         should(doc).be.ok;
         var client = io.connect(connectionString, options);
         client.on('connect', function() {
           client.on('song:deleted', function() {
-            db.findOne({_id: id}, function(err, doc) {
+            db.findOne({
+              _id: id
+            }, function(err, doc) {
               should(doc).be.null;
               done();
             })
           })
         })
         client.emit('song:delete', id);
+      })
+    });
+  })
+
+  describe('song:update', function() {
+    var id = "vaJKoz7CJJRlDvaA";
+    var newTitle = 'Vale más que el cielo';
+    it('should update the object in the DB and respond with song:update', function(done) {
+      // Make sure the song exists in DB
+      db.findOne({
+        _id: id
+      }, function(err, doc) {
+        doc.title.should.be.equal('Yo tengo un tesoro');
+        var client = io.connect(connectionString, options);
+        client.on('connect', function() {
+          client.on('song:updated', function() {
+            db.findOne({
+              _id: id
+            }, function(err, doc) {
+              doc.title.should.be.equal(newTitle);
+              done();
+            })
+          })
+        })
+        client.emit('song:update', id, {
+          title: newTitle
+        });
       })
     });
   })
