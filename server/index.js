@@ -16,6 +16,7 @@ require('../node_modules/lunr-languages/lunr.es.js')(lunr);
 
 var db = {};
 db.songs = new Datastore({filename: conf.dbPath('songs'), autoload: true});
+db.songs.persistence.compactDatafile();
 
 var songsIndex = lunr(function () {
   // use the language (es)
