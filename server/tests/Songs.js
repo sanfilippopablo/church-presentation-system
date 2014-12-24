@@ -1,5 +1,7 @@
 var should = require('should');
 var assert = require('assert');
+var async = require('async');
+var _ = require('underscore');
 var io = require('socket.io-client');
 var db;
 var fs = require('fs-extra');
@@ -112,6 +114,49 @@ describe('Songs Endpoint', function() {
           title: newTitle
         });
       })
+    });
+  })
+
+  describe('song:query', function() {
+    var queries = [{
+      query: 'te alavo',
+      result: ["hYX5KDE9cuvszKam"]
+    }, {
+      query: 'tu fidelidad',
+      result: ["GY3RINMScEz6Ncxj", "lAU3pgJNFJYxbDRW"]
+    }, {
+      query: 'tu amor por mi',
+      result: ["hYX5KDE9cuvszKam"]
+    }, {
+      query: 'bale mas que el cielo',
+      result: ["vaJKoz7CJJRlDvaA"]
+    }, {
+      query: 'como tu',
+      result: ["GY3RINMScEz6Ncxj"]
+    }, {
+      query: 'mi salvador',
+      result: ["vaJKoz7CJJRlDvaA"]
+    }, {
+      query: 'miel',
+      result: ["hYX5KDE9cuvszKam"]
+    }]
+    it('should respond to song:query with song:queryresult and an array of results', function(done) {
+      var iterator = function(item, cb){
+        var client = io.connect(connectionString, options);
+        client.on('connect', function() {
+          client.on('song:queryresult', function(results) {
+            var resultsIds = _.map(results, function(result){return result._id});
+            // The actual check
+            for (var i = 0; i < item.result.length; i++) {
+              resultsIds.should.contain(results[i]);
+            }
+          })
+        })
+        client.emit('song:update', item.query);
+      }
+
+      async.map(queries, iterator, done);
+
     });
   })
 
