@@ -142,20 +142,27 @@ describe('Songs Endpoint', function() {
     }]
     it('should respond to song:query with song:queryresult and an array of results', function(done) {
       var iterator = function(item, cb){
+
+
         var client = io.connect(connectionString, options);
         client.on('connect', function() {
+
+
           client.on('song:queryresult', function(results) {
+
+
             var resultsIds = _.map(results, function(result){return result._id});
             // The actual check
             for (var i = 0; i < item.result.length; i++) {
-              resultsIds.should.contain(results[i]);
+              resultsIds.should.containEql(item.result[i]);
             }
+            cb();
           })
         })
-        client.emit('song:update', item.query);
+        client.emit('song:query', item.query);
       }
 
-      async.map(queries, iterator, done);
+      async.each(queries, iterator, done);
 
     });
   })

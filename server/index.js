@@ -8,9 +8,40 @@ var io = require('socket.io')(server);
 var path = require('path');
 var Datastore = require('nedb');
 var conf = require('./config')[environment];
+var _ = require('underscore');
+
+var lunr = require('lunr');
+require('../node_modules/lunr-languages/lunr.stemmer.support.js')(lunr);
+require('../node_modules/lunr-languages/lunr.es.js')(lunr);
 
 var db = {};
 db.songs = new Datastore({filename: conf.dbPath('songs'), autoload: true});
+
+var songsIndex = lunr(function () {
+  // use the language (es)
+  this.use(lunr.es);
+
+  this.pipeline.add(function (token, tokenIndex, tokens) {
+    return token.replace(/[HhBbVvh]+/g, '')
+  })
+
+  // then, the normal lunr index initialization
+  this.field('title', { boost: 10 })
+  this.field('body')
+  this.ref('_id')
+});
+
+// Fill songIndex with data
+db.songs.find({}, function(err, docs){
+  for (var i = 0; i < docs.length; i++) {
+    var viceVerses = _.map(docs[i].verses, function(verse){return verse.lines.join('\n')});
+    songsIndex.add({
+      _id: docs[i]._id,
+      title: docs[i].title,
+      body: viceVerses.join('\n')
+    })
+  }
+})
 
 // Serving webapps
 app.use('/admin', express.static(path.join(__dirname, '../public/admin')));
@@ -23,11 +54,12 @@ var currentState = {};
 io.sockets.on('connection', function (socket) {
 
   // Songs
-  require('./controllers/Song')(socket, db.songs, currentState);
+  require('./controllers/Song')(socket, db.songs, songsIndex, currentState);
 });
 
 server.listen(conf.port, function(){
-  console.log('Server started and listening in ', conf.port)
+  console.log('Server listening at ', conf.port)
+
 });
 
 module.exports.server = server;

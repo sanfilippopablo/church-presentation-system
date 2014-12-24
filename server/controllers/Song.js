@@ -1,4 +1,6 @@
-module.exports = function(socket, Songs, currentState) {
+var async = require('async');
+
+module.exports = function(socket, Songs, index, currentState) {
 
   // == MANAGEMENT ==
 
@@ -26,13 +28,22 @@ module.exports = function(socket, Songs, currentState) {
 
   // Query
   socket.on('song:query', function(text) {
-    /*
+    var results = index.search(text);
 
-    Acá va a estar la magia de lunr.js
-    Song.query(text, function(err, songs) {
-      socket.emit('song:queryresult', songs);
+
+    if ( !results ) {
+      socket.emit('song:queryresult', []);
+      return;
+    }
+    async.map(results, function(item, cb){
+      Songs.findOne({_id: item.ref}, function(err, song){
+        song.score = item.score;
+        cb(null, song);
+      })
+    }, function(err, results){
+      socket.emit('song:queryresult', results)
     })
-    */
+
   });
 
 
