@@ -1,6 +1,6 @@
 var async = require('async');
 
-module.exports = function(socket, Songs, index, currentState) {
+module.exports = function(socket, Songs, currentState) {
 
   // == MANAGEMENT ==
 
@@ -28,7 +28,7 @@ module.exports = function(socket, Songs, index, currentState) {
 
   // Query
   socket.on('song:query', function(text) {
-    var results = index.search(text);
+    var results = Songs.index.search(text);
 
 
     if ( !results ) {
