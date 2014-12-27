@@ -10,13 +10,6 @@ var Datastore = require('nedb');
 var conf = require('./config')[environment];
 var _ = require('underscore');
 
-var db = {};
-
-// == SONGS ==
-
-// DB
-require('./songs/db')(conf, db);
-
 // Serving webapps
 app.use('/admin', express.static(path.join(__dirname, '../public/admin')));
 app.use('/live', express.static(path.join(__dirname, '../public/live')));
@@ -28,7 +21,7 @@ var currentState = {};
 io.sockets.on('connection', function (socket) {
 
   // Songs
-  require('./controllers/Song')(socket, db.songs, currentState);
+  require('./songs/socket-listeners')(socket, currentState);
 });
 
 server.listen(conf.port, function(){
@@ -37,4 +30,3 @@ server.listen(conf.port, function(){
 });
 
 module.exports.server = server;
-module.exports.db = db;

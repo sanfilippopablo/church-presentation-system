@@ -3,7 +3,7 @@ var assert = require('assert');
 var async = require('async');
 var _ = require('underscore');
 var io = require('socket.io-client');
-var db;
+var songs;
 var fs = require('fs-extra');
 var path = require('path');
 var conf = require('../config')[process.env.NODE_ENV];
@@ -21,20 +21,22 @@ var fixtures = require('./songs-fixture');
 describe('Songs Endpoint', function() {
 
   beforeEach(function(done) {
-
     // Start the server
     var index = require('../index');
     server = index.server;
-    db = index.db.songs;
 
     // Load fixtures in the DB
-    db.remove({}, {
-      multi: true
-    }, function(err, numRemoved) {
-      db.insert(fixtures, done);
-    })
-
+    songs = require('../songs/model');
+    songs.create(fixtures, done);
   });
+
+  afterEach(function(done){
+    songs.db.find({}, function(err, docs){
+      async.each(docs, function(item, asynccb) {
+        songs.delete(item._id, asynccb)
+      }, done)
+    })
+  })
 
   describe('song:create', function() {
 

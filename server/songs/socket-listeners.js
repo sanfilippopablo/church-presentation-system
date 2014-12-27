@@ -1,47 +1,35 @@
+var songs = require('./model');
 var async = require('async');
 
-module.exports = function(socket, Songs, currentState) {
+module.exports = function(socket, currentState) {
 
   // == MANAGEMENT ==
 
   // Create
   socket.on('song:create', function(song) {
-    song.creationDate = new Date();
-    Songs.insert(song, function(err, obj) {
+    songs.create(song, function(err, obj) {
       socket.emit('song:created', obj);
     })
   });
 
   // Update
   socket.on('song:update', function(id, data) {
-    Songs.update({_id: id}, data, {}, function(err, numReplaced, obj) {
+    songs.update(id, data, function(err, obj) {
       socket.emit('song:updated', obj);
     })
   });
 
   // Delete
   socket.on('song:delete', function(id) {
-    Songs.remove({_id: id}, {}, function(err, numRemoved) {
+    songs.delete(id, function(err) {
       socket.emit('song:deleted');
     })
   });
 
   // Query
   socket.on('song:query', function(text) {
-    var results = Songs.index.search(text);
-
-
-    if ( !results ) {
-      socket.emit('song:queryresult', []);
-      return;
-    }
-    async.map(results, function(item, cb){
-      Songs.findOne({_id: item.ref}, function(err, song){
-        song.score = item.score;
-        cb(null, song);
-      })
-    }, function(err, results){
-      socket.emit('song:queryresult', results)
+    songs.query(text, function(err, results){
+      socket.emit('song:queryresult', results);
     })
 
   });
